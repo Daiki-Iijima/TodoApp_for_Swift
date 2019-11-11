@@ -39,6 +39,13 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //  保存しているToDoの読み込み
+        let userDefaults = UserDefaults.standard
+        if let storedTodoList = userDefaults.array(forKey: "todoList") as? [String]
+        {
+            todoList.append(contentsOf: storedTodoList)
+        }
     }
 
     //  メモリ不足になった時に呼ばれるメソッド
@@ -69,7 +76,13 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
                 
                 //  テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)],with: UITableView.RowAnimation.right)
-            }
+            
+                //  ToDoの保存
+                let userDefaults = UserDefaults.standard
+                userDefaults.set(self.todoList,forKey: "todoList")
+                //  保存
+                userDefaults.synchronize()
+                }
         })
         
         //  上のブロックで作成したOKボタンがタップされた時の処理を設定
@@ -90,8 +103,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         //  アラートダイアログを表示
         present(alertController,animated: true,completion: nil)
     }
-    
-    
     
 }
 
