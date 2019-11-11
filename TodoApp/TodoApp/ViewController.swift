@@ -9,25 +9,33 @@
 import UIKit
 
 class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "todoCell", for: indexPath)
-        
-        let todoTitle = todoList[indexPath.row]
-        
-        cell.textLabel?.text = todoTitle
-        
-        return cell
-    }
-    
     
     var todoList = [String]();
     
     @IBOutlet weak var tableView: UITableView!
+    
+    //  テーブルの行数を設定する
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        //  todoListの数行数を確保する
+        return todoList.count
+    }
+    
+    //  テーブルの行ごとのセルを設定する
+    //  システムがセルを描画する必要が出たら呼ばれる
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        //  StoryBoardで作成した、todoCellを取得する
+        let cell = tableView.dequeueReusableCell(withIdentifier: "todoCell", for: indexPath)
+        
+        //  行番号にあったToDoのタイトルを取得する
+        let todoTitle = todoList[indexPath.row]
+        
+        //  セルのラベルにtodoListから取得したタイトルを設定する
+        cell.textLabel?.text = todoTitle
+        
+        return cell
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,10 +57,10 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         //  テキストエリアを追加
         alertController.addTextField(configurationHandler: nil)
         
-        //  OKボタンを追加
-        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {
-            (UIAlertAction) in
-            
+        //  OKボタンを追加しhandlerにアクションを記述
+        let okAction = UIAlertAction(title: "OK",
+                                     style: UIAlertAction.Style.default,
+                                     handler: { (UIAlertAction) in
             //  OKボタンがタップされた時の処理
             if let textField = alertController.textFields?.first{
                 
@@ -62,13 +70,20 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
                 //  テーブルに行が追加されたことをテーブルに通知
                 self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)],with: UITableView.RowAnimation.right)
             }
-        }
+        })
         
         //  上のブロックで作成したOKボタンがタップされた時の処理を設定
         alertController.addAction(okAction)
         
         //  CANCELボタンが押された時の処理
-        let cancelAction = UIAlertAction(title: "CANCEL", style: UIAlertAction.Style.cancel,handler: nil)
+        let cancelAction = UIAlertAction(title: "CANCEL",
+                                         style: UIAlertAction.Style.cancel,
+                                         handler: {(UIAlertAction) in
+            
+            //  キャンセルの時の処理を入れたかったらここに書く
+                                            
+        })
+        
         //  CANCELボタンを追加
         alertController.addAction(cancelAction)
         
